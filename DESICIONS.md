@@ -1,0 +1,2 @@
+Session routes filter by userId in the query itself, so other users’ ids return 404 instead of revealing that they exist.
+select is used on the list endpoint so resume text isn’t sent when it isn’t needed.

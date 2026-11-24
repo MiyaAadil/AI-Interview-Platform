@@ -66,6 +66,24 @@ router.get("/:id", async (req: AuthRequest, res) => {
   res.json(session);
 });
 
+// Delete one of my sessions and its related questions and answers
+router.delete("/:id", async (req: AuthRequest, res) => {
+  const id = parseInt(req.params.id);
+  if (isNaN(id)) {
+    return res.status(400).json({ error: "Invalid id" });
+  }
+
+  const result = await prisma.interviewSession.deleteMany({
+    where: { id, userId: req.user!.id },
+  });
+
+  if (result.count === 0) {
+    return res.status(404).json({ error: "Session not found" });
+  }
+
+  return res.status(204).end();
+});
+
 
 
 router.post("/:id/questions", aiLimiter, async (req: AuthRequest, res) => {

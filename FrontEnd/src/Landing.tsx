@@ -64,7 +64,7 @@ const Landing = () => (
     </section>
 
     <footer className="mx-auto flex min-h-[80px] w-[min(1180px,_calc(100%_-_40px))] flex-wrap items-center justify-between gap-4 py-5 text-[10px] text-[#85877f] sm:w-[min(1180px,_calc(100%_-_64px))]">
-      <Link to="/" className="flex items-center gap-2.5 font-[Manrope] text-base font-extrabold tracking-[-1px] text-[#252a22] no-underline"><img className="size-6 object-contain" src="/interview-prep-logo.svg" alt="" aria-hidden="true" />prepwise</Link>
+      {/* <Link to="/" className="flex items-center gap-2.5 font-[Manrope] text-base font-extrabold tracking-[-1px] text-[#252a22] no-underline"><img className="size-6 object-contain" src="/interview-prep-logo.svg" alt="" aria-hidden="true" />prepwise</Link> */}
       <span className="max-sm:order-3 max-sm:w-full">Practice with purpose. Go in with confidence.</span><span>© {new Date().getFullYear()} Prepwise</span>
     </footer>
   </main>

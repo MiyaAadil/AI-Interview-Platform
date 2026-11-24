@@ -15,7 +15,12 @@ const Navbar = ({ user, onLogout }: NavbarProps) => (
     {user ? (
       <div className="flex items-center gap-4 sm:gap-[30px]">
         <span className="text-[11px] font-semibold text-[#74776f] sm:text-xs">{user.username}</span>
-        <button className="border-0 bg-red-200 py-1 px-2.5 text-sm font-bold text-[#343a31] sm:text-[13px] rounded-lg cursor-pointer" onClick={onLogout}>Log out</button>
+        <button
+          className="inline-flex items-center cursor-pointer rounded-md border border-[#dedfd8] bg-white px-3 py-2 !text-xs !font-semibold !text-[#343a31] transition hover:border-[#ead3d0] hover:bg-[#fcf7f6] hover:!text-[#a24f46] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9a5b52]"
+          onClick={onLogout}
+        >
+          Log out
+        </button>
       </div>
     ) : (
       <div className="flex items-center gap-4 sm:gap-[30px]">

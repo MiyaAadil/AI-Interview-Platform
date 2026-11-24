@@ -5,10 +5,9 @@ import { Link } from "react-router-dom";
 
 interface SessionsPageProps {
   user: User;
-  onLogout: () => void;
 }
 
-const SessionsPage = ({ user, onLogout }: SessionsPageProps) => {
+const SessionsPage = ({ user }: SessionsPageProps) => {
   const [sessions, setSessions] = useState<SessionSummary[]>([]);
   const [loadingList, setLoadingList] = useState<boolean>(true);
 
@@ -59,67 +58,75 @@ const SessionsPage = ({ user, onLogout }: SessionsPageProps) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-8">
-      <header className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Hi, {user.username}</h1>
-        <button onClick={onLogout} className="text-sm underline">Log out</button>
+    <main className="sessions-home">
+      <header className="sessions-heading">
+        <p className="session-eyebrow">YOUR PREPARATION SPACE</p>
+        <h1>Good to see you, {user.username}.</h1>
+        <p>Make a little time to practice. You’re closer than you think.</p>
       </header>
 
-      <form onSubmit={handleCreate} className="bg-white p-6 rounded-lg shadow space-y-3">
-        <h2 className="text-lg font-semibold">New practice session</h2>
+      <form onSubmit={handleCreate} className="new-session-form">
+        <div className="form-heading">
+          <div><p className="session-eyebrow">START SOMETHING NEW</p><h2>New practice session</h2></div>
+          <span className="form-spark" aria-hidden="true">✳</span>
+        </div>
 
         <input
-          className="w-full border rounded px-3 py-2"
+          className="session-field"
           placeholder="Title (e.g. Backend intern at Leapfrog)"
+          aria-label="Session title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
         />
         <textarea
-          className="w-full border rounded px-3 py-2 h-40"
+          className="session-field session-resume"
           placeholder="Paste your resume text here"
+          aria-label="Resume text"
           value={resumeText}
           onChange={(e) => setResumeText(e.target.value)}
           required
         />
         <textarea
-          className="w-full border rounded px-3 py-2 h-24"
+          className="session-field session-job"
           placeholder="Paste the job description (optional)"
+          aria-label="Job description (optional)"
           value={jobDescription}
           onChange={(e) => setJobDescription(e.target.value)}
         />
 
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        {error && <p className="session-error" role="alert">{error}</p>}
 
         <button
           type="submit"
           disabled={saving}
-          className="bg-black text-white rounded px-4 py-2 disabled:opacity-50"
+          className="button button-dark create-session-button"
         >
-          {saving ? "Saving..." : "Create session"}
+          {saving ? "Creating session..." : "Create session"}<span aria-hidden="true">→</span>
         </button>
       </form>
 
-      <section>
-        <h2 className="text-lg font-semibold mb-3">Your sessions</h2>
+      <section className="sessions-list-section">
+        <div className="sessions-list-heading"><h2>Your sessions</h2><span>{sessions.length}</span></div>
         {loadingList ? (
-          <p>Loading...</p>
+          <p className="sessions-empty">Loading your sessions...</p>
         ) : sessions.length === 0 ? (
-          <p className="text-gray-500">No sessions yet. Create your first one above.</p>
+          <p className="sessions-empty">No sessions yet. Create your first one above.</p>
         ) : (
-          <ul className="space-y-2">
+          <ul className="sessions-list">
             {sessions.map((s) => (
-              <li key={s.id} className="bg-white p-4 rounded shadow flex justify-between">
-                <Link to={`/sessions/${s.id}`} className="font-medium hover:underline">{s.title}</Link>
-                <span className="text-sm text-gray-500">
-                  {new Date(s.createdAt).toLocaleDateString()}
-                </span>
+              <li key={s.id}>
+                <Link to={`/sessions/${s.id}`} className="session-list-link">
+                  <span className="session-list-icon" aria-hidden="true">↗</span>
+                  <span className="session-list-copy"><strong>{s.title}</strong><small>{new Date(s.createdAt).toLocaleDateString()}</small></span>
+                  <span className="session-list-arrow" aria-hidden="true">→</span>
+                </Link>
               </li>
             ))}
           </ul>
         )}
       </section>
-    </div>
+    </main>
   );
 };
 

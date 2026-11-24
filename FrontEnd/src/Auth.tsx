@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { api } from "./api";
 import type { User } from "./types";
 
@@ -7,7 +8,9 @@ interface AuthProps {
 }
 
 const Auth = ({ onLogin }: AuthProps) => {
-  const [isSignUp, setIsSignUp] = useState<boolean>(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [isSignUp, setIsSignUp] = useState<boolean>(location.pathname === "/signup");
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -29,6 +32,7 @@ const Auth = ({ onLogin }: AuthProps) => {
         });
         setInfo("Account created! Please log in.");
         setIsSignUp(false);
+        navigate("/login", { replace: true });
         setPassword("");
       } else {
         const data = await api<{ token: string; user: User }>("/api/login", {
@@ -47,13 +51,15 @@ const Auth = ({ onLogin }: AuthProps) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow w-full max-w-sm space-y-4">
-        <h1 className="text-2xl font-bold">{isSignUp ? "Create account" : "Log in"}</h1>
+    <main className="auth-page">
+      <form onSubmit={handleSubmit} className="auth-panel">
+        <div className="auth-kicker">{isSignUp ? "A FRESH START" : "WELCOME BACK"}</div>
+        <h1>{isSignUp ? "Create your account" : "Good to see you again."}</h1>
+        <p className="auth-intro">{isSignUp ? "Set up your space and start practicing with purpose." : "Pick up where your interview preparation left off."}</p>
 
         {isSignUp && (
           <input
-            className="w-full border rounded px-3 py-2"
+            className="auth-input"
             placeholder="Name"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -61,7 +67,7 @@ const Auth = ({ onLogin }: AuthProps) => {
           />
         )}
         <input
-          className="w-full border rounded px-3 py-2"
+          className="auth-input"
           type="email"
           placeholder="Email"
           value={email}
@@ -69,7 +75,7 @@ const Auth = ({ onLogin }: AuthProps) => {
           required
         />
         <input
-          className="w-full border rounded px-3 py-2"
+          className="auth-input"
           type="password"
           placeholder="Password"
           value={password}
@@ -77,13 +83,13 @@ const Auth = ({ onLogin }: AuthProps) => {
           required
         />
 
-        {error && <p className="text-red-600 text-sm">{error}</p>}
-        {info && <p className="text-green-600 text-sm">{info}</p>}
+        {error && <p className="auth-message auth-error" role="alert">{error}</p>}
+        {info && <p className="auth-message auth-success" role="status">{info}</p>}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-black text-white rounded py-2 disabled:opacity-50"
+          className="button button-dark auth-submit"
         >
           {loading ? "Please wait..." : isSignUp ? "Sign up" : "Log in"}
         </button>
@@ -91,16 +97,18 @@ const Auth = ({ onLogin }: AuthProps) => {
         <button
           type="button"
           onClick={() => {
-            setIsSignUp(!isSignUp);
             setError("");
             setInfo("");
+            const nextIsSignUp = !isSignUp;
+            setIsSignUp(nextIsSignUp);
+            navigate(nextIsSignUp ? "/signup" : "/login");
           }}
-          className="w-full text-sm text-gray-600"
+          className="auth-switch"
         >
           {isSignUp ? "Already have an account? Log in" : "No account? Sign up"}
         </button>
       </form>
-    </div>
+    </main>
   );
 };
 

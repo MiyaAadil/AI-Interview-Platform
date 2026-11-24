@@ -32,41 +32,47 @@ const QuestionCard = ({ sessionId, question, onAnswered }: QuestionCardProps) =>
   };
 
   return (
-    <li className="bg-white p-4 rounded shadow space-y-3">
-      <p className="font-medium">
-        {question.order}. {question.text}
-      </p>
+    <li className="question-card">
+      <div className="question-meta">
+        <span>QUESTION {String(question.order).padStart(2, "0")}</span>
+        <span className={question.answer ? "question-status is-done" : "question-status"}>
+          {question.answer ? "Answered" : "Your turn"}
+        </span>
+      </div>
+      <h2 className="question-prompt">{question.text}</h2>
 
       {question.answer ? (
-        <div className="space-y-2">
-          <div>
-            <p className="text-xs uppercase text-gray-500">Your answer</p>
-            <p className="whitespace-pre-wrap">{question.answer.text}</p>
+        <div className="answer-review">
+          <div className="answer-copy">
+            <p className="answer-label">YOUR ANSWER</p>
+            <p>{question.answer.text}</p>
           </div>
-          <div className="bg-gray-50 rounded p-3">
-            <p className="font-semibold">Score: {question.answer.score}/10</p>
-            <p className="text-sm mt-1 whitespace-pre-wrap"><span
-             className="font-bold text-amber-300">AI feedback: </span>{question.answer.feedback}</p>
+          <div className="feedback-card">
+            <div className="feedback-heading">
+              <p className="answer-label">FEEDBACK</p>
+              <span className="score-pill">{question.answer.score}/10</span>
+            </div>
+            <p>{question.answer.feedback}</p>
           </div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-2">
+        <form onSubmit={handleSubmit} className="answer-form">
           <textarea
-            className="w-full border rounded px-3 py-2 h-28"
-            placeholder="Type your answer..."
+            className="answer-input"
+            placeholder="Write your answer here..."
+            aria-label={`Your answer to question ${question.order}`}
             value={text}
             onChange={(e) => setText(e.target.value)}
             maxLength={5000}
             required
           />
-          {error && <p className="text-red-600 text-sm">{error}</p>}
-          <button
-            type="submit"
-            disabled={submitting}
-            className="bg-black text-white rounded px-4 py-2 disabled:opacity-50"
-          >
-            {submitting ? "Evaluating... (a few seconds)" : "Submit answer"}
-          </button>
+          <div className="answer-form-footer">
+            <span className="answer-count">{text.length}/5000</span>
+            <button type="submit" disabled={submitting} className="button button-dark answer-submit">
+              {submitting ? "Reviewing..." : "Submit answer"}<span aria-hidden="true">→</span>
+            </button>
+          </div>
+          {error && <p className="session-error" role="alert">{error}</p>}
         </form>
       )}
     </li>

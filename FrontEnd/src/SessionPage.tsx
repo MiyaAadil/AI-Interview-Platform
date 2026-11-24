@@ -39,48 +39,53 @@ const SessionPage = () => {
     }
   };
 
-  if (loading) return <p className="p-6">Loading...</p>;
+  if (loading) {
+    return <main className="session-page"><p className="session-muted">Loading your session...</p></main>;
+  }
 
   if (!session) {
     return (
-      <div className="p-6">
-        <p className="text-red-600">{error || "Session not found"}</p>
-        <Link to="/" className="underline">Back to sessions</Link>
-      </div>
+      <main className="session-page">
+        <Link to="/" className="session-back">← Your sessions</Link>
+        <div className="session-empty"><p className="session-error">{error || "Session not found"}</p></div>
+      </main>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-6">
-      <Link to="/" className="text-sm underline">← Back to sessions</Link>
-      <h1 className="text-2xl font-bold">{session.title}</h1>
+    <main className="session-page">
+      <Link to="/" className="session-back">← Your sessions</Link>
+      <header className="session-heading">
+        <p className="session-eyebrow">PRACTICE SESSION</p>
+        <h1>{session.title}</h1>
+        <p>{session.questions.length} {session.questions.length === 1 ? "question" : "questions"} to work through at your pace.</p>
+      </header>
 
-      {error && <p className="text-red-600 text-sm">{error}</p>}
+      {error && <p className="session-error" role="alert">{error}</p>}
 
       {session.questions.length === 0 ? (
-        <div className="bg-white p-6 rounded-lg shadow space-y-3">
-          <p>No questions yet. Generate 5 questions based on your resume.</p>
-          <button
-            onClick={handleGenerate}
-            disabled={generating}
-            className="bg-black text-white rounded px-4 py-2 disabled:opacity-50"
-          >
-            {generating ? "Generating... (this can take a few seconds)" : "Generate questions"}
+        <section className="session-empty">
+          <span className="empty-icon" aria-hidden="true">✳</span>
+          <p className="session-eyebrow">READY WHEN YOU ARE</p>
+          <h2>Build your question set</h2>
+          <p>Generate five interview questions based on your resume and the role.</p>
+          <button onClick={handleGenerate} disabled={generating} className="button button-dark session-generate">
+            {generating ? "Preparing questions..." : "Generate questions"}<span aria-hidden="true">→</span>
           </button>
-        </div>
+        </section>
       ) : (
-                <ol className="space-y-3">
-          {session.questions.map((q) => (
+        <ol className="session-question-list">
+          {session.questions.map((question) => (
             <QuestionCard
-              key={q.id}
+              key={question.id}
               sessionId={id!}
-              question={q}
+              question={question}
               onAnswered={loadSession}
             />
           ))}
         </ol>
       )}
-    </div>
+    </main>
   );
 };
 

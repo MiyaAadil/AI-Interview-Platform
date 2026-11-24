@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Auth from "./Auth";
-import type { User } from "./types";
-import SessionsPage from "./SessionsPage";
-import { Routes, Route } from "react-router-dom";
+import Landing from "./Landing";
+import Navbar from "./Navbar";
 import SessionPage from "./SessionPage";
+import SessionsPage from "./SessionsPage";
+import type { User } from "./types";
+import "./App.css";
 
 const App = () => {
   const [user, setUser] = useState<User | null>(() => {
@@ -21,13 +24,27 @@ const App = () => {
     setUser(null);
   };
 
-  if (!user) return <Auth onLogin={setUser} />;
-
   return (
-    <Routes>
-      <Route path="/" element={<SessionsPage user={user} onLogout={handleLogout} />} />
-      <Route path="/sessions/:id" element={<SessionPage />} />
-    </Routes>
+    <>
+      <Navbar user={user} onLogout={handleLogout} />
+      <Routes>
+        {user ? (
+          <>
+            <Route path="/" element={<SessionsPage user={user} />} />
+            <Route path="/sessions/:id" element={<SessionPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </>
+        ) : (
+          <>
+            <Route path="/" element={<Landing />} />
+            <Route path="/login" element={<Auth onLogin={setUser} />} />
+            <Route path="/signup" element={<Auth onLogin={setUser} />} />
+            <Route path="/sessions/:id" element={<Navigate to="/login" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </>
+        )}
+      </Routes>
+    </>
   );
 };
 

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <title>Interview Prep</title>
+  <desc>A minimal speech bubble with a check mark, representing interview practice and feedback.</desc>
+  <path
+    d="M12 13.5C12 9.91 14.91 7 18.5 7h27C49.09 7 52 9.91 52 13.5v23C52 40.09 49.09 43 45.5 43H29l-11.5 9v-9h-1A4.5 4.5 0 0 1 12 38.5v-25Z"
+    stroke="#5145E5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path
+    d="m23 26.5 6.2 6.2L42 20"
+    stroke="#13A892" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

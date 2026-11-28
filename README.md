@@ -3,7 +3,7 @@
 Practice interviews with AI. Paste your resume and a job description, get tailored interview questions, answer them, and receive a score with specific feedback. Every session is saved.
 
 **Live demo:** <https://ai-interviewhelper-platform.vercel.app/>
-(Click **Try demo** to explore without signing up. The backend runs on a free server that sleeps when idle, so the first load can take up to a minute.)
+(The backend runs on a free server that sleeps when idle, so the first load can take up to a minute.)
 
 <screenshot of the questions page> <screenshot of the feedback view>
 
